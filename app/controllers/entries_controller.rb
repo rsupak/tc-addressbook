@@ -2,7 +2,9 @@ class EntriesController < ApplicationController
   before_action :find_id, only: %i[show update destroy edit]
 
   def index
-    @entries = Entry.all
+    @entries = Entry.search(params[:search])
+                    .paginate(page: params[:page], per_page: 10)
+                    .order('lastname ASC')
   end
 
   def show; end
@@ -39,7 +41,7 @@ class EntriesController < ApplicationController
 
   def import
     Entry.import(params[:file])
-    redirect_to root_url, success: "Entries Imported!"
+    redirect_to root_url, success: 'Entries Imported!'
   end
 
   private
@@ -49,6 +51,6 @@ class EntriesController < ApplicationController
   end
 
   def entry_params
-    params.require(:entry).permit(:firstname, :lastname, :phone, :email)
+    params.require(:entry).permit(:firstname, :lastname, :phone, :email, :search)
   end
 end
