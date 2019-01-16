@@ -18,20 +18,11 @@ class EntriesController < ApplicationController
   def create
     @entry = Entry.new(entry_params)
 
-    respond_to do |format|
-      if @entry.save
-        format.html { redirect_to @entry, notice: 'Entry was successfully created.' }
-        format.json { render :show, status: :created, location: @entry }
-      else
-        format.html { render :new }
-        format.json { render json: @entry.errors, status: :unprocessable_entity }
-      end
+    if @entry.save
+      redirect_to @entry
+    else
+      render :new
     end
-    # if @entry.save
-    #   redirect_to @entry
-    # else
-    #   render :new
-    # end
   end
 
   def update
